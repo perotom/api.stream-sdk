@@ -1,0 +1,64 @@
+<!--
+---------------------------------------------------------------------------------------------
+Copyright (c) Infiniscene, Inc. All rights reserved.
+Licensed under the MIT License. See License.txt in the project root for license information.
+---------------------------------------------------------------------------------------------
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Scene WebRTC example</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap" rel="stylesheet">
+	
+	<style>
+		html, body { background-color: #1d1e26; color: #dbe0e3; font-family: "Space Grotesk", sans-serif; }
+		body { padding: 30px; }
+		input {
+			background: transparent;
+			border: 1px solid #979fa3;
+		}
+		a, a:active, a:visited {
+			color: #d8f205;
+		}
+		button {
+			border: none;
+			cursor: pointer;
+			background-color: #d8f205;
+			color: #1d1e26;
+			padding: 5px;
+			font-weight: bold;
+			margin-top: 15px;
+		}
+		label {
+			font-weight: bold;
+		}
+	</style>
+</head>
+
+<body>
+	<img src="./src/logo.png" alt="API.stream" style="height: 30px" />
+	<h2> Scene composition: WebRTC </h2>
+	<p> This example project enables you to see and test how to interact with scene composition while bringing in WebRTC guests </p>
+	<p> To get started enter your <a href="https://api.stream/docs/account/">API Key</a> and an RTMP URL and key to output to. When ready hit start broadcast to start the broadcast </p>
+	<p> While viewing the destination stream, click "Join WebRTC" to connect your local session to WebRTC, forwarding webcam and microphone. </p>
+	<p> Ensure to click "Stop broadcast" once you are done testing. </p>
+	<div id="root" style="display: flex; flex-direction: column; flex-wrap: wrap; align-items: start;">
+		<label for="apikey">API Key: </label>
+		<input type="text" id="apikey" />
+		<label for="destination">Destination URL: </label>
+		<input type="text" id="dsturl" />
+		<label for="destination">Destination Key: </label>
+		<input type="text" id="dstkey" />
+
+		<div>
+			<button onclick="start()">Start Broadcast</button>
+			<button onclick="stop()">Stop Broadcast</button>
+			<button onclick="joinWebrtc()">Join WebRTC</button>
+		</div>
+	</div>
+	<script type="module" src="/src/index.ts"></script>
+</body>
+</html>

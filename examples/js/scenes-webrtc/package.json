@@ -1,0 +1,37 @@
+{
+  "name": "@api.stream/examples/js/scenes-webrtc",
+  "version": "1.0.0",
+  "description": "Exemplary use of API-driven broadcasting with WebRTC",
+  "author": "Lightstream",
+  "license": "MIT",
+  "keywords": [
+    "api.stream",
+    "api-stream",
+    "api stream",
+    "video",
+    "live",
+    "streaming",
+    "webrtc",
+    "rtmp",
+    "audio",
+    "camera",
+    "microphone",
+    "live streaming",
+    "live-streaming",
+    "compositor"
+  ],
+  "homepage": "https://api.stream",
+  "main": "index.js",
+  "scripts": {
+    "start": "vite dev"
+  },
+  "dependencies": {
+    "@api.stream/sdk": "^1.0.1",
+    "@rollup/plugin-typescript": "^8.3.1",
+    "livekit-client": "^0.17.5",
+    "vite": "^2.9.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.5.2"
+  }
+}

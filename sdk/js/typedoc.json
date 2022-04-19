@@ -1,0 +1,26 @@
+{
+  "entryPoints": [
+    "./src/index.ts"
+  ],
+  "tsconfig": "./tsconfig.json",
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "excludeExternals": false,
+  "readme": "README.md",
+  "sort": [
+    "source-order"
+  ],
+  "plugin": [
+    "typedoc-plugin-reference-excluder-ls"
+  ],
+  "listInvalidSymbolLinks": true,
+  "entryPointStrategy": "expand",
+  "disableSources": true,
+  "name": "API.stream JavaScript SDK",
+  "includeVersion": false,
+  "excludedFunctionOrMethod": "(.*JSON)|(.*encode)|(.*decode)|(.*Partial)|(.*ToNumber)",
+  "excludedVariables": "(.*ServiceDefinition)",
+  "excludedClasses": "(.*ClientImpl)",
+  "excludeVariablesFromNamespaces": "(.*ApiModel)",
+  "excludedTypeAliases": "(DeepPartial)"
+}

@@ -1,0 +1,11 @@
+# ---------------------------------------------------------------------------------------------
+# Copyright (c) Infiniscene, Inc. All rights reserved.
+# Licensed under the MIT License. See License.txt in the project root for license information.
+# ---------------------------------------------------------------------------------------------
+node_modules
+lib
+bin
+.DS_Store
+dist
+examples/js/*/build
+.npmrc

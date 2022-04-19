@@ -1,0 +1,28 @@
+{
+  "ignore": [
+    "*.md",
+    "**/*.md",
+    "*.lock",
+    "*.bin",
+    "sdk/js/src/version/index.js",
+    "sdk/java/gradlew",
+    "sdk/java/gradlew.bat",
+    "sdk/java/gradle/wrapper/*",
+    "sdk/js/lib/**"
+  ],
+  "license": "build/LICENSE.snippet.txt",
+  "licenseFormats": {
+    "js|ts|tsx|jsx|java|npmrc": {
+      "prepend": "",
+      "append": "",
+      "file": "build/LICENSE.snippet-js.txt"
+    },
+    "yml": {
+      "append": "",
+      "eachLine": {
+        "prepend": "# "
+      }
+    }
+  },
+  "trailingWhitespace": "TRIM"
+}

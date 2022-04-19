@@ -1,0 +1,33 @@
+# ---------------------------------------------------------------------------------------------
+# Copyright (c) Infiniscene, Inc. All rights reserved.
+# Licensed under the MIT License. See License.txt in the project root for license information.
+# ---------------------------------------------------------------------------------------------
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+    paths:
+     - 'sdk/js/*'
+
+name: Publish Package
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./sdk/js
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - run: npm install
+      - run: npm run build
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: public
+          package: ./sdk/js/package.json
