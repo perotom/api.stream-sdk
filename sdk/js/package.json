@@ -1,6 +1,6 @@
 {
   "name": "@api.stream/sdk",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "JavaScript client for accessing API.stream cloud services",
   "author": "Lightstream",
   "license": "MIT",

@@ -557,8 +557,8 @@ export enum Region {
   REGION_US_WEST_2 = "REGION_US_WEST_2",
   /** REGION_US_CENTRAL_1 - US Central */
   REGION_US_CENTRAL_1 = "REGION_US_CENTRAL_1",
-  /** REGION_AP_SOUTHEAST - Asia Pacific Southeast */
-  REGION_AP_SOUTHEAST = "REGION_AP_SOUTHEAST",
+  /** REGION_AP_SOUTHEAST_1 - Asia Pacific Southeast */
+  REGION_AP_SOUTHEAST_1 = "REGION_AP_SOUTHEAST_1",
   /** REGION_CA_EAST_1 - Canada East */
   REGION_CA_EAST_1 = "REGION_CA_EAST_1",
   /** REGION_EU_CENTRAL_1 - Europe Central */
@@ -588,8 +588,8 @@ export function regionFromJSON(object: any): Region {
     case "REGION_US_CENTRAL_1":
       return Region.REGION_US_CENTRAL_1;
     case 10:
-    case "REGION_AP_SOUTHEAST":
-      return Region.REGION_AP_SOUTHEAST;
+    case "REGION_AP_SOUTHEAST_1":
+      return Region.REGION_AP_SOUTHEAST_1;
     case 20:
     case "REGION_CA_EAST_1":
       return Region.REGION_CA_EAST_1;
@@ -620,8 +620,8 @@ export function regionToJSON(object: Region): string {
       return "REGION_US_WEST_2";
     case Region.REGION_US_CENTRAL_1:
       return "REGION_US_CENTRAL_1";
-    case Region.REGION_AP_SOUTHEAST:
-      return "REGION_AP_SOUTHEAST";
+    case Region.REGION_AP_SOUTHEAST_1:
+      return "REGION_AP_SOUTHEAST_1";
     case Region.REGION_CA_EAST_1:
       return "REGION_CA_EAST_1";
     case Region.REGION_EU_CENTRAL_1:
@@ -647,7 +647,7 @@ export function regionToNumber(object: Region): number {
       return 4;
     case Region.REGION_US_CENTRAL_1:
       return 5;
-    case Region.REGION_AP_SOUTHEAST:
+    case Region.REGION_AP_SOUTHEAST_1:
       return 10;
     case Region.REGION_CA_EAST_1:
       return 20;
@@ -1096,12 +1096,20 @@ export interface SrtPushAddress {
   baseUrl?: string | undefined;
 }
 
+/** rtmp pull addressing */
+export interface RtmpPullAddress {
+  /** rtmp source url */
+  url: string;
+}
+
 /** live source address (select one) */
 export interface SourceAddress {
   /** rtmp push addressing */
   rtmpPush: SourceRtmpPushAddress | undefined;
   /** the srt address to publish to */
   srtPush: SrtPushAddress | undefined;
+  /** the rtmp address to pull from */
+  rtmpPull: RtmpPullAddress | undefined;
 }
 
 /** rtmp push destination address */
@@ -2831,8 +2839,60 @@ export const SrtPushAddress = {
   },
 };
 
+function createBaseRtmpPullAddress(): RtmpPullAddress {
+  return { url: "" };
+}
+
+export const RtmpPullAddress = {
+  encode(
+    message: RtmpPullAddress,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.url !== "") {
+      writer.uint32(10).string(message.url);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): RtmpPullAddress {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRtmpPullAddress();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.url = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RtmpPullAddress {
+    return {
+      url: isSet(object.url) ? String(object.url) : "",
+    };
+  },
+
+  toJSON(message: RtmpPullAddress): unknown {
+    const obj: any = {};
+    message.url !== undefined && (obj.url = message.url);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<RtmpPullAddress>): RtmpPullAddress {
+    const message = createBaseRtmpPullAddress();
+    message.url = object.url ?? "";
+    return message;
+  },
+};
+
 function createBaseSourceAddress(): SourceAddress {
-  return { rtmpPush: undefined, srtPush: undefined };
+  return { rtmpPush: undefined, srtPush: undefined, rtmpPull: undefined };
 }
 
 export const SourceAddress = {
@@ -2848,6 +2908,12 @@ export const SourceAddress = {
     }
     if (message.srtPush !== undefined) {
       SrtPushAddress.encode(message.srtPush, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.rtmpPull !== undefined) {
+      RtmpPullAddress.encode(
+        message.rtmpPull,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -2868,6 +2934,9 @@ export const SourceAddress = {
         case 2:
           message.srtPush = SrtPushAddress.decode(reader, reader.uint32());
           break;
+        case 3:
+          message.rtmpPull = RtmpPullAddress.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2884,6 +2953,9 @@ export const SourceAddress = {
       srtPush: isSet(object.srtPush)
         ? SrtPushAddress.fromJSON(object.srtPush)
         : undefined,
+      rtmpPull: isSet(object.rtmpPull)
+        ? RtmpPullAddress.fromJSON(object.rtmpPull)
+        : undefined,
     };
   },
 
@@ -2897,6 +2969,10 @@ export const SourceAddress = {
       (obj.srtPush = message.srtPush
         ? SrtPushAddress.toJSON(message.srtPush)
         : undefined);
+    message.rtmpPull !== undefined &&
+      (obj.rtmpPull = message.rtmpPull
+        ? RtmpPullAddress.toJSON(message.rtmpPull)
+        : undefined);
     return obj;
   },
 
@@ -2909,6 +2985,10 @@ export const SourceAddress = {
     message.srtPush =
       object.srtPush !== undefined && object.srtPush !== null
         ? SrtPushAddress.fromPartial(object.srtPush)
+        : undefined;
+    message.rtmpPull =
+      object.rtmpPull !== undefined && object.rtmpPull !== null
+        ? RtmpPullAddress.fromPartial(object.rtmpPull)
         : undefined;
     return message;
   },
