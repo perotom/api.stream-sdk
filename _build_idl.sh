@@ -9,6 +9,7 @@ docker run -v $OUTPUT_DIR:/workspace/generated/nodejs -v $LIGHTSTREAM_PROTO_ROOT
 rm -rf $OUTPUT_DIR/platform
 rm -rf $OUTPUT_DIR/service
 rm -rf $OUTPUT_DIR/account
+rm -rf $OUTPUT_DIR/demo
 rm -rf $OUTPUT_DIR/chargebee
 rm -rf $OUTPUT_DIR/protoc-gen-openapiv2
 rm -rf $OUTPUT_DIR/security
