@@ -80,6 +80,7 @@ export module ApiStream {
     displayName?: string;
     guestControl?: ApiStream.GuestProject;
     trial: boolean;
+    demo: boolean;
   }
 
   export type Environment = 'dev' | 'stage' | 'prod';
@@ -305,6 +306,7 @@ export class ApiStream {
       userId: rawDecodedAccessToken.user.userId,
       displayName: rawDecodedAccessToken.user.displayName,
       trial: rawDecodedAccessToken.user.trial,
+      demo: rawDecodedAccessToken.user.demo,
     };
     if ( rawDecodedAccessToken.guestControl != null ) {
       decodedAccessToken.guestControl = {
