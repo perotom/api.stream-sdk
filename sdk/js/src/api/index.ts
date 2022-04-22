@@ -15,6 +15,11 @@ import { logger } from './logger';
 
 const clientVersion = require( "../version/index.js" );
 
+export module ApiClient {
+  export type ApiLogCallback = ( api: string, service: string, func: string, request: any, response: any ) => void;
+  export type EventLogCallback = ( service: string, type: string, subtype: string, event: any ) => void;
+}
+
 export class ApiClient {
   protected channel: NiceGrpc.Channel;
   protected accessToken?: string;
@@ -24,6 +29,8 @@ export class ApiClient {
   protected log?: Category;
   protected sessionId: string;
   protected grpcOptions: NiceGrpc.CallOptions;
+  protected apiLogCallback?: ApiClient.ApiLogCallback;
+  protected eventLogCallback?: ApiClient.EventLogCallback;
 
   async * logMiddleware<Request, Response> (
     call: NiceGrpc.ClientMiddlewareCall<Request, Response>,
@@ -34,6 +41,18 @@ export class ApiClient {
       const result = yield* call.next( call.request, options );
       this.log.debug( `-> ${ path }: ok` );
       this.log.trace( `${ JSON.stringify( call.request ) } -> ${ path }: ${ JSON.stringify( result ) }` );
+
+      if ( this.apiLogCallback ) {
+        let parts = path.split( "/" );
+        let serviceParts = parts[ 1 ].split( "." );
+        let service = serviceParts[ serviceParts.length - 1 ];
+        let version = serviceParts[ serviceParts.length - 2 ];
+        let api = serviceParts[ serviceParts.length - 3 ];
+        let func = parts[ 2 ];
+
+        this.apiLogCallback( api, service, func, call.request, result );
+      }
+
       return result;
     } catch ( error ) {
       this.log.trace( `${ JSON.stringify( call.request ) } -> ${ path }` );
@@ -50,10 +69,12 @@ export class ApiClient {
     }
   }
 
-  constructor ( sessionId: string, server: string, sdkVersion?: string, logCategory?: string ) {
+  constructor ( sessionId: string, server: string, sdkVersion?: string, logCategory?: string, apiLogCallback?: ApiClient.ApiLogCallback, eventLogCallback?: ApiClient.EventLogCallback ) {
     this.sessionId = sessionId;
     this.sdkVersion = sdkVersion;
     this.version = clientVersion;
+    this.apiLogCallback = apiLogCallback;
+    this.eventLogCallback = eventLogCallback;
     this.log = logger.getCategory( logCategory );
 
     // If we're running under node, we need to use a specific transport (nice-grpc-web doesn't work natively).

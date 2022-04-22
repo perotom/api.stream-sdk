@@ -57,6 +57,8 @@ type EventsClient = NiceGrpc.Client<typeof EventApiModel.EventServiceDefinition>
 const LOG_CATEGORY = 'EventApi';
 
 export class EventApi extends ApiClient {
+  public static APISTREAM_EVENT_PREFIX = "apistream";
+
   private ws: Websocket;
 
   // Cached subscriptions.
@@ -95,8 +97,10 @@ export class EventApi extends ApiClient {
     server: string,
     private readonly websocketServer: string,
     sdkVersion: string,
+    apiLogCallback?: ApiClient.ApiLogCallback,
+    eventLogCallback?: ApiClient.EventLogCallback
   ) {
-    super( sessionId, server, sdkVersion, LOG_CATEGORY );
+    super( sessionId, server, sdkVersion, LOG_CATEGORY, apiLogCallback, eventLogCallback );
   }
 
   /**
@@ -431,9 +435,25 @@ export class EventApi extends ApiClient {
         }
       }
 
-      handler.handler( payload ? payload[ name ] as any : undefined, { isFromCurrentSession: payload.sessionId === this.sessionId } );
+      if ( this.eventLogCallback && name === 'event' && payload.event ) {
+        let eventService: string | undefined = undefined;
+        let eventType = payload.event.name;
+        let eventSubType: string | undefined = undefined;
+
+        // apistream:live:EVENT_TYPE_PROJECT:EVENT_SUB_TYPE_UPDATE
+        if ( payload.event.name.startsWith( EventApi.APISTREAM_EVENT_PREFIX ) ) {
+          let parts = payload.event.name.split( ':' );
+          if ( parts.length == 4 ) {
+            eventService = parts[ 1 ];
+            eventType = parts[ 2 ];
+            eventSubType = parts[ 3 ];
+          }
+          this.eventLogCallback( eventService, eventType, eventSubType, payload );
+        }
+
+        handler.handler( payload ? payload[ name ] as any : undefined, { isFromCurrentSession: payload.sessionId === this.sessionId } );
+      }
     }
-  }
 
   /**
    * Make an RPC call

@@ -39,14 +39,15 @@ export class LayoutApi extends ApiClient {
     sessionId: string,
     eventApi: EventApi,
     server: string,
-    sdkVersion?: string
+    sdkVersion?: string,
+    apiLogCallback?: ApiClient.ApiLogCallback
   ) {
-    super( sessionId, server, sdkVersion, LOG_CATEGORY );
+    super( sessionId, server, sdkVersion, LOG_CATEGORY, apiLogCallback );
     this.eventApi = eventApi;
 
     this.eventApi.on( 'event', { name: `${ LayoutApi.LAYOUTAPI_EVENT_PREFIX }:*`, ignoreSessionEvents: true }, ( evt ) => {
-      const [, eventName] = evt.name.split(`${LayoutApi.LAYOUTAPI_EVENT_PREFIX}:`);
-      const [type, subtype] = eventName.split( ':' );
+      const [ , eventName ] = evt.name.split( `${ LayoutApi.LAYOUTAPI_EVENT_PREFIX }:` );
+      const [ type, subtype ] = eventName.split( ':' );
       const payload = evt.payload;
 
       for ( const handler of ( this.handlers[ type ] ?? [] ) ) {

@@ -1201,6 +1201,7 @@ export interface SceneComposition {
   rendererUrl?: string | undefined;
   /** the active "scene" to render */
   selectedLayoutId?: string | undefined;
+  debug?: boolean | undefined;
 }
 
 /** compose using an external renderer */
@@ -3704,7 +3705,11 @@ export const StudioSdkComposition = {
 };
 
 function createBaseSceneComposition(): SceneComposition {
-  return { rendererUrl: undefined, selectedLayoutId: undefined };
+  return {
+    rendererUrl: undefined,
+    selectedLayoutId: undefined,
+    debug: undefined,
+  };
 }
 
 export const SceneComposition = {
@@ -3717,6 +3722,9 @@ export const SceneComposition = {
     }
     if (message.selectedLayoutId !== undefined) {
       writer.uint32(18).string(message.selectedLayoutId);
+    }
+    if (message.debug !== undefined) {
+      writer.uint32(24).bool(message.debug);
     }
     return writer;
   },
@@ -3734,6 +3742,9 @@ export const SceneComposition = {
         case 2:
           message.selectedLayoutId = reader.string();
           break;
+        case 3:
+          message.debug = reader.bool();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -3750,6 +3761,7 @@ export const SceneComposition = {
       selectedLayoutId: isSet(object.selectedLayoutId)
         ? String(object.selectedLayoutId)
         : undefined,
+      debug: isSet(object.debug) ? Boolean(object.debug) : undefined,
     };
   },
 
@@ -3759,6 +3771,7 @@ export const SceneComposition = {
       (obj.rendererUrl = message.rendererUrl);
     message.selectedLayoutId !== undefined &&
       (obj.selectedLayoutId = message.selectedLayoutId);
+    message.debug !== undefined && (obj.debug = message.debug);
     return obj;
   },
 
@@ -3766,6 +3779,7 @@ export const SceneComposition = {
     const message = createBaseSceneComposition();
     message.rendererUrl = object.rendererUrl ?? undefined;
     message.selectedLayoutId = object.selectedLayoutId ?? undefined;
+    message.debug = object.debug ?? undefined;
     return message;
   },
 };

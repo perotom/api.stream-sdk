@@ -1,0 +1,39 @@
+{
+  "name": "studio-kit-demo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "proxy": "npx browser-sync start --proxy \"localhost:3006\" --tunnel studio"
+  },
+  "dependencies": {
+    "@api.stream/sdk": "file:../../../sdk/js/api.stream-sdk-1.0.15.tgz",
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@mui/icons-material": "^5.6.2",
+    "@mui/lab": "^5.0.0-alpha.79",
+    "@mui/material": "^5.6.3",
+    "axios": "^0.26.1",
+    "bootstrap": "^5.1.3",
+    "nanoid": "^3.3.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-google-recaptcha": "^2.1.0",
+    "react-syntax-highlighter": "^15.5.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-babel": "^5.3.0",
+    "@types/node": "^16.11.7",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-google-recaptcha": "^2.1.5",
+    "@types/react-syntax-highlighter": "^13.5.2",
+    "@vitejs/plugin-react": "1.0.8",
+    "babel-plugin-wildcard": "^7.0.0",
+    "csstype": "^3.0.8",
+    "typescript": "^4.5.2",
+    "typescript-plugin-css-modules": "^3.4.0",
+    "vite": "^2.6.4"
+  }
+}

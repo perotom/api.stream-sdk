@@ -60,8 +60,8 @@ export class LiveApi extends ApiClient {
     typeof LiveApiModel.PublicAuthenticationServiceDefinition
   >;
 
-  constructor ( sessionId: string, eventApi: EventApi, server: string, onAccessTokenRefresh: LiveApi.AccessTokenRefreshCallback, apiKey?: string, sdkVersion?: string ) {
-    super( sessionId, server, sdkVersion, LOG_CATEGORY );
+  constructor ( sessionId: string, eventApi: EventApi, server: string, onAccessTokenRefresh: LiveApi.AccessTokenRefreshCallback, apiKey?: string, sdkVersion?: string, apiLogCallback?: ApiClient.ApiLogCallback ) {
+    super( sessionId, server, sdkVersion, LOG_CATEGORY, apiLogCallback );
     this.eventApi = eventApi;
     this.accessTokenRefreshCallback = onAccessTokenRefresh;
 
@@ -158,6 +158,7 @@ export class LiveApi extends ApiClient {
         // is it malformed?
         if ( ( headerParts.length == 2 ) && ( headerParts[ 0 ] == 'Bearer' ) ) {
           let accessToken = headerParts[ 1 ];
+          self.log.info( "received refresh token" );
           self.accessTokenRefreshCallback( accessToken );
         }
       }

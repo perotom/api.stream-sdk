@@ -25,6 +25,7 @@ export { LiveKitUtils };
 
 import { Category } from 'typescript-logging-category-style';
 import { logger } from './api/logger';
+import { ApiClient } from './api';
 
 const CLIENT_VERSION = require( "./version/index.js" );
 
@@ -110,6 +111,10 @@ export module ApiStream {
       // override the auto-selected event-api backend websocket server (used for debugging)
       eventApiWebSocketServer?: string;
     };
+
+    // callback for logging every API call
+    apiLogCallback?: ApiClient.ApiLogCallback;
+    eventLogCallback?: ApiClient.EventLogCallback;
   }
 }
 
@@ -188,9 +193,9 @@ export class ApiStream {
     if ( overrideEndpoints.eventApiWebSocketServer == undefined )
       overrideEndpoints.eventApiWebSocketServer = EVENTAPI_WS_SERVERS[ this.env ];
 
-    this.eventApi = new EventApi( sessionId, overrideEndpoints.eventApiServer, overrideEndpoints.eventApiWebSocketServer, options.sdkVersion );
-    this.layoutApi = new LayoutApi( sessionId, this.eventApi, overrideEndpoints.layoutApiServer, options.sdkVersion );
-    this.liveApi = new LiveApi( sessionId, this.eventApi, overrideEndpoints.liveApiServer, this.setAccessToken.bind( this ), options.apiKey, options.sdkVersion );
+    this.eventApi = new EventApi( sessionId, overrideEndpoints.eventApiServer, overrideEndpoints.eventApiWebSocketServer, options.sdkVersion, options.apiLogCallback, options.eventLogCallback );
+    this.layoutApi = new LayoutApi( sessionId, this.eventApi, overrideEndpoints.layoutApiServer, options.sdkVersion, options.apiLogCallback );
+    this.liveApi = new LiveApi( sessionId, this.eventApi, overrideEndpoints.liveApiServer, this.setAccessToken.bind( this ), options.apiKey, options.sdkVersion, options.apiLogCallback );
 
     // Handle the event api's authentication expiring
     // this handles the case where no calls have been made to the live API but the access
