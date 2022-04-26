@@ -9,3 +9,9 @@ bin
 dist
 examples/js/*/build
 .npmrc
+.idea
+.gradle
+build
+*.iml
+gradle.properties
+gradle

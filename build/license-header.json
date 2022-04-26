@@ -4,11 +4,18 @@
     "**/*.md",
     "*.lock",
     "*.bin",
+    "*.jar",
     "sdk/js/src/version/index.js",
+    "sdk/js/lib/**",
+    "sdk/java/bin/**",
+    "sdk/java/build/**",
+    "sdk/java/gradle/**",
+    "sdk/java/.gradle/**",
+    "sdk/java/.idea/**",
     "sdk/java/gradlew",
     "sdk/java/gradlew.bat",
-    "sdk/java/gradle/wrapper/*",
-    "sdk/js/lib/**"
+    "sdk/js/lib/**",
+    "deps/**"
   ],
   "license": "build/LICENSE.snippet.txt",
   "licenseFormats": {
