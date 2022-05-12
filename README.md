@@ -7,6 +7,7 @@ The API.stream API enables development partners to quickly build web-based video
 
 
 ### SDKs
+- [Java SDK](/sdk/java/)
 - [JavaScript SDK](/sdk/js/)
 
 ### Examples
